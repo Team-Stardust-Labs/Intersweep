@@ -4,7 +4,7 @@ using System.Collections;
 using TMPro;
 
 
-public class GameHandler : MonoBehaviour
+public class BCKP_GameHandler : MonoBehaviour
 {
 
 	/* IDEAS
@@ -15,8 +15,31 @@ public class GameHandler : MonoBehaviour
 	 * 
 	 */
 
+	// UI References
+	string statsText = "";
+	public TextMeshProUGUI statisticsText;
+	public TextMeshProUGUI logText;
+	public Slider recyclingCopperSlider;
+	public Slider recyclingIronSlider;
+	public Slider recyclingMetalsSlider;
+	public TextMeshProUGUI recyclingCopperLabel;
+	public TextMeshProUGUI recyclingIronLabel;
+	public TextMeshProUGUI recyclingMetalsLabel;
+	public GameObject winScreenUI;
+	public GameObject loseScreenUI;
+    public Slider shipProgress;
+    public Slider shipCapacityProgress;
+    public Slider solarProgress;
+    public Slider spaceStationProgress;
+    double refreshRate = 2.0;			// how often per second the UI is updated
 
 
+	// time
+	int    elapsed_days = 0;
+	double elapsed_time_manual_production = 0.0;
+	double elapsed_time_daily = 0.0;    // intern
+	double elapsed_time = 0.0;
+	double time_scale = 1.0;            // how many days per second
 
 	// general
 	bool game_running = true;
@@ -91,18 +114,6 @@ public class GameHandler : MonoBehaviour
 	// storage
 	double storage = 0.0;
 
-
-
-	// // // //
-
-	// UNDER HERE IS THE NEW CODE
-
-	// // // //
-
-	TimeManager GameTime = new TimeManager();
-	UserInterface UI = new UserInterface();
-
-
 	private void Start()
 	{
 		QualitySettings.vSyncCount = 2;
@@ -117,7 +128,7 @@ public class GameHandler : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		
+		double DELTA = (double) Time.deltaTime * time_scale;
 
 		// check for game running
 		if (!game_running)
@@ -126,11 +137,16 @@ public class GameHandler : MonoBehaviour
 		}
 
 		// updates
-		updateResources(GameTime.deltaTime());
-		updateWaste(GameTime.deltaTime());
-		updateConsumption(GameTime.deltaTime());
+		updateResources(DELTA);
+		updateWaste(DELTA);
+		updateConsumption(DELTA);
 		updateUpgrades();
 
+		// Time Management
+		elapsed_time_daily += DELTA;
+		elapsed_time += DELTA;
+		elapsed_time_manual_production += Time.deltaTime; // real delta time for manual production
+		elapsed_days = Mathf.FloorToInt((float) elapsed_time);
 
 		// Game Objectives
 		checkGameEnd();
