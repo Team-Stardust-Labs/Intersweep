@@ -1,15 +1,14 @@
+/*
+    CamerPan
+	- Tracks the Mouse in the 3D Scene and rotates the Camera to create a responsive effect
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraPan : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     float mouseXInterp = 0.0f;
 
     // Update is called once per frame
