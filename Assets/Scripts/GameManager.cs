@@ -22,17 +22,6 @@ public class GameHandler : MonoBehaviour
 	public TimeManager timeManager = new TimeManager();
 	public ResourceManager resources = new ResourceManager();
 
-	//
-
-	// UNDER HERE IS THE NEW CODE
-
-	// // // //
-
-
-
-	// GameState Object for saving/loading
-	// ...
-
     private void Start()
 	{
 		QualitySettings.vSyncCount = 2;						// enable vsync to counter screen tearing
