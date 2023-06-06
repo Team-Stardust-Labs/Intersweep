@@ -1041,7 +1041,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &173751394
 GameObject:
@@ -1844,6 +1844,74 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 374983352}
   m_CullTransparentMesh: 1
+--- !u!1 &377336998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 377337000}
+  - component: {fileID: 377336999}
+  m_Layer: 0
+  m_Name: ResourceManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &377336999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377336998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d713a72e45d18460780dff375838952e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  copper: 0
+  iron: 0
+  metals: 0
+  income_copper: 0
+  income_iron: 0
+  income_metals: 0
+  recycling_copper: 0.5
+  recycling_iron: 0.3
+  recycling_metals: 0.2
+  solar_count: 1
+  max_solar_count: 10
+  solar_energy_generation: 1
+  sector: 1
+  ship_capacity: 0
+  ship_count: 10
+  ship_capacity_level: 0
+  space_station_level: 0
+  waste: 20000
+  waste_collection: 1
+  fuel: 10000
+  consumption_space_station: 2
+  consumption_collector_ships: 0.5
+  consumption_processing: 1
+  consumption_general: 0
+--- !u!4 &377337000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377336998}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 795.222, y: 167.92503, z: -6.675454}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &380365448
 GameObject:
   m_ObjectHideFlags: 0
@@ -2064,6 +2132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 409288321}
+  - component: {fileID: 409288322}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -2086,6 +2155,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &409288322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409288320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8edf68a97ca5c45feadf89c363dcf311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statsText: 
+  statisticsText: {fileID: 0}
+  logText: {fileID: 0}
+  recyclingCopperSlider: {fileID: 0}
+  recyclingIronSlider: {fileID: 0}
+  recyclingMetalsSlider: {fileID: 0}
+  recyclingCopperLabel: {fileID: 0}
+  recyclingIronLabel: {fileID: 0}
+  recyclingMetalsLabel: {fileID: 0}
+  winScreenUI: {fileID: 0}
+  loseScreenUI: {fileID: 0}
+  shipProgress: {fileID: 0}
+  shipCapacityProgress: {fileID: 0}
+  solarProgress: {fileID: 0}
+  spaceStationProgress: {fileID: 0}
+  print_debug_logs: 0
+  timeManager: {fileID: 981326908}
+  resources: {fileID: 377336999}
 --- !u!1 &410495107
 GameObject:
   m_ObjectHideFlags: 0
@@ -3979,6 +4078,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963811812}
   m_CullTransparentMesh: 1
+--- !u!1 &981326907
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 981326909}
+  - component: {fileID: 981326908}
+  m_Layer: 0
+  m_Name: TimeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &981326908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981326907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00786195e3e894af99c237cbe918ec11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  elapsed_days: 0
+  can_produce_manual: 1
+  UI: {fileID: 409288322}
+--- !u!4 &981326909
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981326907}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 795.222, y: 167.92503, z: -6.675454}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &984689085
 GameObject:
   m_ObjectHideFlags: 0
@@ -3988,6 +4134,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 984689086}
+  - component: {fileID: 984689087}
   m_Layer: 0
   m_Name: UpgradeManager
   m_TagString: Untagged
@@ -4008,8 +4155,23 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &984689087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984689085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc5191b7ddb834b53b4faf3ff10bc17a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeManager: {fileID: 981326908}
+  resources: {fileID: 377336999}
+  UI: {fileID: 409288322}
 --- !u!1 &1058047273
 GameObject:
   m_ObjectHideFlags: 0
@@ -5354,6 +5516,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1426697993}
+  - component: {fileID: 1426697994}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -5374,8 +5537,23 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1426697994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1426697992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7dd3a0f7bfa54b388d6c01337aca3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UI: {fileID: 409288322}
+  timeManager: {fileID: 981326908}
+  resources: {fileID: 377336999}
 --- !u!1 &1443260246
 GameObject:
   m_ObjectHideFlags: 0
@@ -11876,7 +12054,7 @@ RectTransform:
   - {fileID: 1767009674}
   - {fileID: 302153299}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -12743,7 +12921,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2071774323
 GameObject:

@@ -7,14 +7,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
-public class NewBehaviourScript : MonoBehaviour
+public class UpgradeManager : MonoBehaviour
 {
     // Manager References
-    public TimeManager timeManager = new TimeManager();
-    public ResourceManager resources = new ResourceManager();
-    public UIManager UI = new UIManager();
+    public TimeManager timeManager;
+    public ResourceManager resources;
+    public UIManager UI;
 
     public void requestBuildShip()
     {

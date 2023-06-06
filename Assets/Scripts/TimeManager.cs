@@ -21,7 +21,7 @@ public class TimeManager : MonoBehaviour
     public bool   can_produce_manual = true;     // if `manual production` can be used
 
     // Manager References
-    public UIManager UI = new UIManager();
+    public UIManager UI;
 
     private void FixedUpdate()
     {

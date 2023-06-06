@@ -36,8 +36,8 @@ public class UIManager : MonoBehaviour
     public bool print_debug_logs = false;
 
     // Manager References
-    public TimeManager timeManager = new TimeManager();
-    public ResourceManager resources = new ResourceManager();
+    public TimeManager timeManager;
+    public ResourceManager resources;
 
     // shows or hides the Win Screen
     public void setWinScreen(bool active)
