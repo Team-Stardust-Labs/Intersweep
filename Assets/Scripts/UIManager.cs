@@ -140,9 +140,9 @@ public class UIManager : MonoBehaviour
         recyclingMetalsSlider.value = resources.recycling_metals;
 
         // LABELS
-        recyclingCopperLabel.text = "Kupfer\n" + (Mathf.Ceil(resources.recycling_copper * 100.0f)).ToString() + "%";
-        recyclingIronLabel.text = "Eisen\n" + (Mathf.Floor(resources.recycling_iron * 100.0f)).ToString() + "%";
-        recyclingMetalsLabel.text = "Edelmetalle\n" + (Mathf.Floor(resources.recycling_metals * 100.0f)).ToString() + "%";
+        recyclingCopperLabel.text = (Mathf.Ceil(resources.recycling_copper * 100.0f)).ToString() + "%";
+        recyclingIronLabel.text = (Mathf.Floor(resources.recycling_iron * 100.0f)).ToString() + "%";
+        recyclingMetalsLabel.text = (Mathf.Floor(resources.recycling_metals * 100.0f)).ToString() + "%";
 
     }
 

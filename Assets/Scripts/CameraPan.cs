@@ -9,6 +9,8 @@ using UnityEngine;
 
 public class CameraPan : MonoBehaviour
 {
+    public GameObject shipReference;
+
     float mouseXInterp = 0.0f;
 
     // Update is called once per frame
@@ -22,8 +24,8 @@ public class CameraPan : MonoBehaviour
         mousePos.x = Mathf.Clamp(mousePos.x, -1.0f, 1.0f);
         mousePos.y = Mathf.Clamp(mousePos.y, -1.0f, 1.0f);
 
-        mouseXInterp = Mathf.Lerp(mouseXInterp, mousePos.x, 3.0f * Time.deltaTime);
+        mouseXInterp = Mathf.Lerp(mouseXInterp, mousePos.x, 1.0f * Time.deltaTime);
 
-        transform.rotation = Quaternion.AngleAxis(10 * mouseXInterp, Vector3.up);
+        shipReference.transform.rotation = Quaternion.AngleAxis((20 * mouseXInterp) - 90, Vector3.up);
     }
 }
