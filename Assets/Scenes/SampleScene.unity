@@ -2170,7 +2170,7 @@ GameObject:
   - component: {fileID: 415223480}
   - component: {fileID: 415223479}
   m_Layer: 0
-  m_Name: GameHandler
+  m_Name: GameplayController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2185,23 +2185,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 415223478}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9eff140b25d64601aabc6ba32245d099, type: 3}
+  m_Script: {fileID: 11500000, guid: d9a88ad1ac5de420b95c8633efa85801, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statisticsText: {fileID: 72542669}
-  logText: {fileID: 1767185708}
-  recyclingCopperSlider: {fileID: 410495109}
-  recyclingIronSlider: {fileID: 158913286}
-  recyclingMetalsSlider: {fileID: 1974552890}
-  recyclingCopperLabel: {fileID: 767073091}
-  recyclingIronLabel: {fileID: 582700426}
-  recyclingMetalsLabel: {fileID: 1346492727}
-  winScreenUI: {fileID: 1767009673}
-  loseScreenUI: {fileID: 302153298}
-  shipProgress: {fileID: 1134209962}
-  shipCapacityProgress: {fileID: 772066159}
-  solarProgress: {fileID: 70704911}
-  spaceStationProgress: {fileID: 1307273195}
 --- !u!4 &415223480
 Transform:
   m_ObjectHideFlags: 0

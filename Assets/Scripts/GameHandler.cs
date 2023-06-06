@@ -30,10 +30,7 @@ public class GameHandler : MonoBehaviour
     uint sector = 1;
 	const uint max_sector = 20;
 
-	// resources
-	double copper = 0.0;
-	double iron = 0.0;
-	double metals = 0.0;
+
 
 	// resource processing income per second
 	const double base_income_copper = 7.0;
@@ -91,28 +88,25 @@ public class GameHandler : MonoBehaviour
 	// storage
 	double storage = 0.0;
 
-
-
-	// // // //
+	//
 
 	// UNDER HERE IS THE NEW CODE
 
 	// // // //
 
-	TimeManager GameTime = new TimeManager();
-	UserInterface UI = new UserInterface();
 
 
-	private void Start()
+	// GameState Object for saving/loading
+	// ...
+
+    private void Start()
 	{
 		QualitySettings.vSyncCount = 2;
 		Application.targetFrameRate = targetFrameRate;
 		Screen.SetResolution(1920, 1080, true);
 
 		updateRecyclingUI();
-
-		winScreenUI.SetActive(false);
-		loseScreenUI.SetActive(false);
+		
 	}
 
 	void FixedUpdate()
@@ -135,40 +129,17 @@ public class GameHandler : MonoBehaviour
 		// Game Objectives
 		checkGameEnd();
 
-		// UI Update
-		if (elapsed_time_daily > (1.0 / refreshRate) * time_scale) {
-
-			elapsed_time_daily -= (1.0 / refreshRate) * time_scale;    // reset elapsed time
-
-			printStatistics();
-			refreshUIButtons();
-		}
-
-		// manual production update nerf
-		if (elapsed_time_manual_production > 0.2) // 5x per second is max to prevent autoclickers
-		{
-			can_produce_manual = true;
-			elapsed_time_manual_production = 0.0;
-		}
+		
 
 
 	}
 
 	void updateResources(double DELTA)
 	{
-		// update income based on recycling values and energy available
-		double energy = solar_count * solar_energy_generation; // calculate total energy
-
-		// income = recycling slider value * energy * base values
-		income_copper = recycling_copper * energy * base_income_copper;
-		income_iron = recycling_iron * energy * base_income_iron;
-		income_metals = recycling_metals * energy * base_income_metals;
-
-		// resource income
-		copper  += income_copper    * DELTA;
-		iron    += income_iron      * DELTA;
-		metals  += income_metals    * DELTA;
-	}
+		copper.updateProduction(DELTA, energy.getEnergy());
+        iron.updateProduction(DELTA, energy.getEnergy());
+        metals.updateProduction(DELTA, energy.getEnergy());
+    }
 
 
 	// compute consumption and recalculate fuel
@@ -208,7 +179,7 @@ public class GameHandler : MonoBehaviour
 			print("You Win!");
 			game_running = false;
 			printStatistics();
-			winScreenUI.SetActive(true);
+			UI.showWinScreen(true);
 		}
 		// Lose ( Fuel empty )
 		else if (fuel <= 0.0)
@@ -216,8 +187,8 @@ public class GameHandler : MonoBehaviour
 			print("You Lose.");
 			game_running = false;
 			printStatistics();
-			loseScreenUI.SetActive(true);
-		}
+            UI.showLoseScreen(true);
+        }
 	}
 
 	void updateUpgrades()
@@ -227,86 +198,6 @@ public class GameHandler : MonoBehaviour
 			ship_capacity = ship_capacity_levels[ship_capacity_level];
 	}
 
-    // ##########################
-    // ##     UI TRIGGERS      ##
-    // ##########################
-
-    public void requestBuildShip()
-    {
-        double required_iron = ship_base_cost + (ship_upgrade_cost * ship_count);
-        if (iron >= required_iron)
-        {
-            ship_count++;
-            iron -= required_iron;
-            addToLog("Neues Sammlerschiff gebaut.");
-        }
-        else
-        {
-            addToLog("Nicht genügend Eisen! Du brauchst " + required_iron);
-        }
-    }
-
-    public void requestUpgradeShips()
-	{
-		double required_metals = 0.0;
-		if (ship_capacity_level < ship_capacity_upgrade_metals.Length)
-			required_metals = ship_capacity_upgrade_metals[ship_capacity_level];
-		else
-		{
-			addToLog("Schiffkapazität vollständig geupgraded", false);
-			return;
-		}
-
-		if (metals >= required_metals)
-		{
-			ship_capacity_level++;
-			metals -= required_metals;
-			addToLog("Schiffkapazität geupgraded auf Level " + ship_capacity_level);
-		}
-		else
-		{
-			addToLog("Nicht genug Metall! Du brauchst " + required_metals);
-		}
-	}
-
-	public void requestBuildSolarPanel()
-	{
-        double required_copper = solar_base_cost + (solar_upgrade_cost * solar_count);
-
-		if (solar_count+1 > max_solar_count)
-		{
-			addToLog("Maximale Anzahl an Solarzellen bereits erreicht. Upgrade die Raumstation.");
-			return;
-		}
-
-        if (copper >= required_copper)
-        {
-            solar_count++;
-            copper -= required_copper;
-            addToLog("Neue Solarzelle gebaut.");
-        }
-        else
-        {
-            addToLog("Nicht genügend Kupfer! Du brauchst " + required_copper);
-        }
-    }
-
-	public void requestSpaceStationUpgrade()
-    {
-        double required_copper = space_station_base_cost + (space_station_upgrade_cost * space_station_level);
-
-        if (copper >= required_copper)
-        {
-            space_station_level++;
-			max_solar_count = 10 + (10 * space_station_level);
-            copper -= required_copper;
-            addToLog("Raumstation geupgraded!");
-        }
-        else
-        {
-            addToLog("Nicht genügend Kupfer! Du brauchst " + required_copper);
-        }
-    }
 
 	// Manual Production
 	public void requestManualCopper()

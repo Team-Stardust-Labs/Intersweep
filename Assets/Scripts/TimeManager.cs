@@ -56,13 +56,24 @@ public class TimeManager : MonoBehaviour
         return elapsedTimeManualProduction;
     }
 
+    public double getTimeScale()
+    {
+        return timeScale;
+    }
+
     public double deltaTime()
     {
         return DELTA;
     }
 
-
     // Setters
+
+    public void setElapsedTimeDaily(double _elapsedTimeDaily)
+    {
+        elapsedTimeDaily = _elapsedTimeDaily;
+    }
+
+    // Functions
 
     public void resetElapsedTimeManualProduction()
     {
