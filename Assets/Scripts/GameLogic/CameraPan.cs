@@ -1,0 +1,31 @@
+/*
+    CamerPan
+	- Tracks the Mouse in the 3D Scene and rotates the Camera to create a responsive effect
+*/
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CameraPan : MonoBehaviour
+{
+    public GameObject shipReference;
+
+    float mouseXInterp = 0.0f;
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        // Convert mouse position on screen to normalized center coordinates
+        Vector2 mousePos = Input.mousePosition / new Vector2(Screen.width, Screen.height);
+
+        mousePos -= new Vector2(0.5f, 0.5f);
+        mousePos *= 2.0f;
+        mousePos.x = Mathf.Clamp(mousePos.x, -1.0f, 1.0f);
+        mousePos.y = Mathf.Clamp(mousePos.y, -1.0f, 1.0f);
+
+        mouseXInterp = Mathf.Lerp(mouseXInterp, mousePos.x, 1.0f * Time.deltaTime);
+
+        shipReference.transform.rotation = Quaternion.AngleAxis((20 * mouseXInterp) - 90, Vector3.up);
+    }
+}
