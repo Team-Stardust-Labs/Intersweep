@@ -8,12 +8,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class UpgradeManager : MonoBehaviour
 {
     // Manager References
     public TimeManager timeManager;
     public ResourceManager resources;
     public UIManager UI;
+
+    // Particle Systems
+    public ParticleSystem particles_incoming;
+    public ParticleSystem partilces_outgoing;
+    
 
     public void requestBuildShip()
     {
@@ -22,6 +28,8 @@ public class UpgradeManager : MonoBehaviour
         {
             resources.ship_count++;
             resources.iron -= required_iron;
+            partilces_outgoing.maxParticles = resources.ship_count;
+            particles_incoming.maxParticles = resources.ship_count;
             UI.addToLog("Neues Sammlerschiff gebaut.");
         }
         else

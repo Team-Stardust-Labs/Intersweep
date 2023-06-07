@@ -12,6 +12,8 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
 
+
+
     // Variables
     bool game_running = true;
     bool infinite_mode = false;
