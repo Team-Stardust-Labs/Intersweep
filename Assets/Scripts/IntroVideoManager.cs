@@ -7,6 +7,7 @@ using UnityEngine.Video;
 public class IntroVideoManager : MonoBehaviour
 {
     public VideoPlayer video;
+    public AudioSource menuMusic;
 
     bool video_finished = false;
 
@@ -16,6 +17,7 @@ public class IntroVideoManager : MonoBehaviour
     {
         print("Video Is Over");
         video_finished = true;
+        menuMusic.Play(); // play menu music when video is finished
     }
 
     private void FixedUpdate()
