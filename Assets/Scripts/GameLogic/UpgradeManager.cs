@@ -18,7 +18,7 @@ public class UpgradeManager : MonoBehaviour
 
     // Particle Systems
     public ParticleSystem particles_incoming;
-    public ParticleSystem partilces_outgoing;
+    public ParticleSystem particles_outgoing;
     
 
     public void requestBuildShip()
@@ -28,9 +28,15 @@ public class UpgradeManager : MonoBehaviour
         {
             resources.ship_count++;
             resources.iron -= required_iron;
-            partilces_outgoing.maxParticles = resources.ship_count;
-            particles_incoming.maxParticles = resources.ship_count;
             UI.addToLog("Neues Sammlerschiff gebaut.");
+
+
+            // upgrade ship particle count
+            var outgoing_ps = particles_outgoing.main;
+            var incoming_ps = particles_incoming.main;
+
+            outgoing_ps.maxParticles = resources.ship_count;
+            incoming_ps.maxParticles = resources.ship_count;
         }
         else
         {
