@@ -15,8 +15,8 @@ public class TimeManager : MonoBehaviour
     double elapsed_time_manual_production = 0.0; // elapsed time units since last `manual production`
     double elapsed_time_daily = 0.0;             // elapsed time units per day
     double elapsed_time = 0.0;                   // elapsed time units since scene start
-    double time_scale = 1.0;                     // how many days per real second
-    double refresh_rate = 2.0;                   // how often per second the UI is updated
+    public double time_scale = 1.0;                     // how many days per real second
+    public double refresh_rate = 2.0;                   // how often per second the UI is updated
     double DELTA = 0.0;                          // time since last frame
     public bool   can_produce_manual = true;     // if `manual production` can be used
 

@@ -29,6 +29,8 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI recyclingMetalsLabel;
     public GameObject winScreenUI;
     public GameObject loseScreenUI;
+    public AudioSource winSound;
+    public AudioSource loseSound;
     public Slider shipProgress;
     public Slider shipCapacityProgress;
     public Slider solarProgress;
@@ -45,12 +47,23 @@ public class UIManager : MonoBehaviour
     public void setWinScreen(bool active)
     {
         winScreenUI.SetActive(active);
+
+        if(active)
+        {
+            winSound.Play();
+        }
+        
     }
 
     // shows or hides the Lose Screen
     public void setLoseScreen(bool active)
     {
         loseScreenUI.SetActive(active);
+
+        if(active)
+        {
+            loseSound.Play();
+        }
     }
 
     // applies the statistics to the user interface
@@ -186,12 +199,7 @@ public class UIManager : MonoBehaviour
 
     public void goToMainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
-    }
-
-    public void goToSettings()
-    {
-        SceneManager.LoadScene("Settings");
+        SceneManager.LoadScene(0);
     }
 
 }
