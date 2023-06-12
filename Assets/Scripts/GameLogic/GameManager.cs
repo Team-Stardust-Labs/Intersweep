@@ -29,12 +29,30 @@ public class GameManager : MonoBehaviour
         QualitySettings.vSyncCount = 2;                     // enable vsync to counter screen tearing
         Application.targetFrameRate = target_frame_rate;    // the game dosen't need to run at 5000 fps so cap it reasonably
         Screen.SetResolution(1920, 1080, true);             // the UI is not fully responsive so set it to a widely accepted standard resolution
-
+    
         UI.updateRecyclingUI();
         UI.setWinScreen(false);
         UI.setLoseScreen(false);
+
+        UI.pauseMenuUI.SetActive(false);
     }
 
+    void Update()
+    {
+        //checks for Escape presses to pause/resume gameplay
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (UI.pauseMenuUI.activeSelf)
+            {
+                resume();
+            }
+            else
+            {
+                pause();
+            }
+        }
+
+    }
     void FixedUpdate()
     {
 
@@ -80,6 +98,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //pauses gameplay and opens pause menu
+    public void pause()
+    {
+        game_running = false;
+        UI.toggleInGamePause();
+    }
 
-
+    //closes pause menu and resumes gameplay
+    public void resume()
+    {
+        game_running = true;
+        UI.toggleInGamePause();
+    }
 }

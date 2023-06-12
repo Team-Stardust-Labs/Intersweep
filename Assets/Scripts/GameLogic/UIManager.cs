@@ -11,6 +11,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -32,6 +33,7 @@ public class UIManager : MonoBehaviour
     public Slider shipCapacityProgress;
     public Slider solarProgress;
     public Slider spaceStationProgress;
+    public GameObject pauseMenuUI;
 
     public bool print_debug_logs = false;
 
@@ -170,5 +172,26 @@ public class UIManager : MonoBehaviour
         updateRecyclingUI(2); // 2 is for metals
     }
 
+    public void toggleInGamePause()
+    {
+        if (pauseMenuUI.activeSelf)
+        {
+            pauseMenuUI.SetActive(false);
+        } 
+        else
+        {
+            pauseMenuUI.SetActive(true);
+        }
+    }
+
+    public void goToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void goToSettings()
+    {
+        SceneManager.LoadScene("Settings");
+    }
 
 }
