@@ -1233,7 +1233,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &302153299
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4662,8 +4662,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   elapsed_days: 0
-  time_scale: 200
-  refresh_rate: 6
+  time_scale: 4
+  refresh_rate: 8
   can_produce_manual: 1
   UI: {fileID: 409288322}
 --- !u!4 &981326909
