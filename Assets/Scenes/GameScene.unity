@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0005389461, g: 0.01159159, b: 0.007065907, a: 1}
+  m_IndirectSpecularColor: {r: 0.0005389621, g: 0.011592826, b: 0.0070666904, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1764,7 +1764,7 @@ MonoBehaviour:
   waste_collection: 1
   fuel: 10000
   consumption_space_station: 2
-  consumption_collector_ships: 0.5
+  consumption_collector_ships: 1
   consumption_processing: 1
   consumption_general: 0
 --- !u!4 &377337000
@@ -3026,7 +3026,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1.4487915, y: 49.36487}
+  m_AnchoredPosition: {x: -1.4488525, y: 49.36487}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &609392064
@@ -4662,7 +4662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   elapsed_days: 0
-  time_scale: 4
+  time_scale: 3
   refresh_rate: 8
   can_produce_manual: 1
   UI: {fileID: 409288322}
