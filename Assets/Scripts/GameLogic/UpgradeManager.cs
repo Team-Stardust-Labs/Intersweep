@@ -51,7 +51,7 @@ public class UpgradeManager : MonoBehaviour
             required_metals = resources.ship_capacity_upgrade_metals[resources.ship_capacity_level];
         else
         {
-            UI.addToLog("Schiffkapazität vollständig geupgraded", false);
+            UI.addToLog("Sammelkapazität vollständig geupgraded", false);
             return;
         }
 
@@ -59,11 +59,11 @@ public class UpgradeManager : MonoBehaviour
         {
             resources.ship_capacity_level++;
             resources.metals -= required_metals;
-            UI.addToLog("Schiffkapazität geupgraded auf Level " + resources.ship_capacity_level);
+            UI.addToLog("Sammelkapazität erhöht auf Stufe " + resources.ship_capacity_level);
         }
         else
         {
-            UI.addToLog("Nicht genug Metall! Du brauchst " + required_metals);
+            UI.addToLog("Nicht genug Gold! Du brauchst " + required_metals);
         }
     }
 
@@ -73,7 +73,7 @@ public class UpgradeManager : MonoBehaviour
 
         if (resources.solar_count + 1 > resources.max_solar_count)
         {
-            UI.addToLog("Maximale Anzahl an Solarzellen bereits erreicht. Upgrade die Raumstation.");
+            UI.addToLog("Maximale Anzahl an Solarpanels erreicht. Upgrade die Raumstation für mehr.");
             return;
         }
 
@@ -81,7 +81,7 @@ public class UpgradeManager : MonoBehaviour
         {
             resources.solar_count++;
             resources.copper -= required_copper;
-            UI.addToLog("Neue Solarzelle gebaut.");
+            UI.addToLog("Neues Solarpanel gebaut.");
         }
         else
         {
@@ -103,6 +103,23 @@ public class UpgradeManager : MonoBehaviour
         else
         {
             UI.addToLog("Nicht genügend Kupfer! Du brauchst " + required_copper);
+        }
+    }
+
+    public void requestSolarCapacityUpgrade()
+    {
+        double required_metals = resources.solar_capacity_base_cost + (resources.solar_capacity_upgrade_cost * resources.solar_capacity_level);
+
+        if(resources.metals >= required_metals)
+        {
+            resources.solar_capacity_level++;
+            resources.solar_capacity = 1.0 + ( 0.1 * resources.solar_capacity_level );
+            resources.metals -= required_metals;
+            UI.addToLog("Solarkapazität erhöht!");
+        }
+        else
+        {
+            UI.addToLog("Nicht genügend Gold! Du brauchst " + required_metals);
         }
     }
 

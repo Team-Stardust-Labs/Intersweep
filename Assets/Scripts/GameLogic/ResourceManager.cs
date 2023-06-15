@@ -46,14 +46,20 @@ public class ResourceManager : MonoBehaviour
     // solar panels
     public uint solar_count = 1;
     public uint max_solar_count = 10;
-    public double solar_energy_generation = 1.0;                // 1 kW * solar count / day
+
 
     public readonly double solar_base_cost = 100.0;             // how much copper the first solar panel costs
     public readonly double solar_upgrade_cost = 100.0;          // how much additional copper per ship the next one costs
 
+    
+    public uint solar_capacity_level = 0;
+    public double solar_capacity = 1.0;                // 1 kW * solar count / day
+    public readonly double solar_capacity_base_cost = 10.0;     // how much gold the first solar capacity upgrade costs
+    public readonly double solar_capacity_upgrade_cost = 5.0;   // how much additional gold each capacity upgrade costs
+ 
     // sector
     public uint sector = 1;
-    public readonly uint max_sector = 20;
+    public readonly uint max_sector = 1;
 
     // ships
     public double ship_capacity = 0.0;
@@ -73,16 +79,18 @@ public class ResourceManager : MonoBehaviour
     public readonly double space_station_upgrade_cost = 1500.0;
 
     // waste
-    public double waste = 20000;                       // waste 20 000 to fuel 10 000 is good combo for 10min gameplay
-    public double waste_collection = 1.0;
+    public double max_waste = 20000;                    // how much waste is maximum in the sector
+    public double waste = 20000;                        // current waste
+    public double waste_collection = 1.0;               // collection rate
+
 
     // fuel
-    public double fuel = 10000.0;                       // 5000 makes for a real challenge
+    public double max_fuel = 10000.0;                   // how much fuel is maximum for sector
+    public double fuel = 10000.0;                       // current fuel (20000 waste to 5000 fuel makes for a real challenge)
 
     // fuel consumption
-    public double consumption_space_station = 2.0;
+    public double consumption_space_station = 0.0;
     public double consumption_collector_ships = 0.5;
-    public double consumption_processing = 1.0;
     public double consumption_general = 0.0;        // all consumption stats summed up
 
     // manual production
@@ -91,7 +99,7 @@ public class ResourceManager : MonoBehaviour
     public void updateResources(double DELTA)
     {
         // update income based on recycling values and energy available
-        double energy = solar_count * solar_energy_generation; // calculate total energy
+        double energy = (0.5 * solar_count) * solar_capacity; // calculate total energy
 
         // income = recycling slider value * energy * base values
         income_copper = recycling_copper * energy * base_income_copper;
@@ -109,7 +117,7 @@ public class ResourceManager : MonoBehaviour
     public void updateConsumption(double DELTA)
     {
 
-        consumption_general = (consumption_collector_ships * ship_count) + consumption_processing + consumption_space_station;
+        consumption_general = (consumption_collector_ships * ship_count) + consumption_space_station;
         fuel -= consumption_general * DELTA;
         if (fuel < 0.0)
             fuel = 0.0;
@@ -130,6 +138,8 @@ public class ResourceManager : MonoBehaviour
         // Ship capacity
         if (ship_capacity_level < ship_capacity_levels.Length)
             ship_capacity = ship_capacity_levels[ship_capacity_level];
+
+        consumption_space_station = 2.0 * space_station_level; // space station consumes more per upgrade
     }
 
 

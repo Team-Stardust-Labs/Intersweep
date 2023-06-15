@@ -12,31 +12,60 @@ using UnityEngine;
 using UnityEngine.UI;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class UIManager : MonoBehaviour
 {
 
 
     // User Interface References
-    public string statsText = "";
     public TextMeshProUGUI statisticsText;
     public TextMeshProUGUI logText;
+    public GameObject winScreenUI;
+    public GameObject loseScreenUI;
+    public AudioSource winSound;
+    public AudioSource loseSound;
+    public GameObject pauseMenuUI;
+
+    // stats
+    public TextMeshProUGUI stats;
+
+    // fuel and waste bar
+    public Slider fuelProgress;
+    public Slider wasteProgress;
+    public TextMeshProUGUI fuelLabel;
+    public TextMeshProUGUI wasteLabel;
+
+    // resource UI
+    public Slider spaceStationProgress;
+    public TextMeshProUGUI resourceStats;
+
+
+    // energy UI
+    public Slider solarProgress;
+    public Slider solarCapacityProgress;
+    public TextMeshProUGUI solarCountLabel;
+    public TextMeshProUGUI solarCapacityLabel;
+
+
+    // ship UI
+    public Slider shipProgress;
+    public Slider shipCapacityProgress;
+    public TextMeshProUGUI shipCountLabel;
+    public TextMeshProUGUI shipCapacityLabel;
+
+    // recycling UI
     public Slider recyclingCopperSlider;
     public Slider recyclingIronSlider;
     public Slider recyclingMetalsSlider;
     public TextMeshProUGUI recyclingCopperLabel;
     public TextMeshProUGUI recyclingIronLabel;
     public TextMeshProUGUI recyclingMetalsLabel;
-    public GameObject winScreenUI;
-    public GameObject loseScreenUI;
-    public AudioSource winSound;
-    public AudioSource loseSound;
-    public Slider shipProgress;
-    public Slider shipCapacityProgress;
-    public Slider solarProgress;
-    public Slider spaceStationProgress;
-    public GameObject pauseMenuUI;
 
+    // consumption UI
+    public TextMeshProUGUI consumptionStats;
+
+    public string statsText = "";
     public bool print_debug_logs = false;
 
     // Manager References
@@ -69,7 +98,42 @@ public class UIManager : MonoBehaviour
     // applies the statistics to the user interface
     public void applyToStatUI()
     {
-        statisticsText.text = statsText;
+        //statisticsText.text = statsText;   // long stat ui list is depcrecated
+
+
+        // DAY AND SECTOR STATS
+        stats.text =  "Tag\t" +    string.Format("{0:00}", timeManager.elapsed_hours / 24) + "\n"
+                    + "Stunde\t" + string.Format("{0:00}", timeManager.elapsed_hours % 24) + "\n"
+                    + "Sektor\t" + resources.sector.ToString() + "/" + resources.max_sector.ToString();
+
+        // FUEL AND WASTE LABELS
+        fuelLabel.text = "Kraftstoff: " + string.Format("{0:0.00}", resources.fuel);
+        wasteLabel.text = "Schrott: " + string.Format("{0:0.00}", resources.waste);
+
+        // FUEL AND WASTE PROGRESS BARS
+        fuelProgress.value = (float) (resources.fuel / resources.max_fuel);
+        wasteProgress.value = (float)(resources.waste / resources.max_waste);
+
+        // RESOURCE STATS
+        statsText = "";
+        addStatText("Kupfer\t" + string.Format("{0:000.0} [+{1:00.00}]", resources.copper, resources.income_copper));
+        addStatText("Eisen\t" + string.Format("{0:000.0} [+{1:00.00}]", resources.iron, resources.income_iron));
+        addStatText("Gold\t" + string.Format("{0:000.0} [+{1:00.00}]", resources.metals, resources.income_metals));
+        resourceStats.text = statsText;
+
+        // SOLAR COUNT AND CAPACITY
+        solarCountLabel.text = "Solarpanels " + resources.solar_count.ToString() + "/" + resources.max_solar_count.ToString();
+        solarCapacityLabel.text = "Solarkapazität " + string.Format("{0:0.0}", resources.solar_capacity);
+
+        // SHIP COUNT AND CAPACITY
+        shipCountLabel.text = "Schiffanzahl " + resources.ship_count.ToString();
+        shipCapacityLabel.text = "Sammelkapazität " + string.Format("{0:0.0}", resources.ship_capacity);
+
+        // CONSUMPTION STATS
+        statsText = "";
+        addStatText("Kraftstoffverbrauch " + string.Format("{0:00.00}", resources.consumption_general));
+        addStatText("Schrottsammelrate " + string.Format("{0:00.00}", resources.waste_collection));
+        consumptionStats.text = statsText;
     }
 
     // refreshes the Button text on the UI
@@ -86,6 +150,10 @@ public class UIManager : MonoBehaviour
 
         // update upgrade solar panel progress
         spaceStationProgress.value = Mathf.Clamp((float)(resources.copper / (resources.space_station_base_cost + (resources.space_station_upgrade_cost * resources.space_station_level))), 0.0f, 1.0f);
+
+        // update solar panel capacity progress
+        solarCapacityProgress.value = Mathf.Clamp((float)(resources.metals / (resources.solar_capacity_base_cost + (resources.solar_capacity_upgrade_cost * resources.solar_capacity_level))), 0.0f, 1.0f);
+
     }
 
     // adds the string s to the statsText variable for debug UI
@@ -101,7 +169,8 @@ public class UIManager : MonoBehaviour
     {
         if ((debug == true && print_debug_logs == true) || (debug == false))
         {
-            logText.text = logText.text.Insert(0, ">> " + s + "\n");
+            //logText.text = logText.text.Insert(0, ">> " + s + "\n"); // this adds to the log
+            logText.text = ">> " + s; // this replaces the log text
         }
     }
 
@@ -110,7 +179,8 @@ public class UIManager : MonoBehaviour
     public void printStatistics()
     {
         statsText = "";
-
+        applyToStatUI();
+        /*
         // time info
         addStatText("----- GENERAL", true);
         addStatText("DAY: " + timeManager.elapsed_days);
@@ -140,8 +210,8 @@ public class UIManager : MonoBehaviour
         addStatText("----- SHIPS", true);
         addStatText("SCHIFFE: \t\t" + resources.ship_count);
         addStatText("KAPAZITÄT: \t" + resources.ship_capacity);
+        */
 
-        applyToStatUI();
     }
 
 
