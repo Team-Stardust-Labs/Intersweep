@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 
 
     // Variables
-    bool game_running = true;
+    public bool game_running = true;
     bool infinite_mode = false;
     int target_frame_rate = 60;
 

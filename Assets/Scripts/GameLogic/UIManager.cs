@@ -71,6 +71,10 @@ public class UIManager : MonoBehaviour
     // Manager References
     public TimeManager timeManager;
     public ResourceManager resources;
+    public GameManager gameManager;
+
+    // Audio
+    public AudioSource alarmSound;
 
     // shows or hides the Win Screen
     public void setWinScreen(bool active)
@@ -111,8 +115,19 @@ public class UIManager : MonoBehaviour
         wasteLabel.text = "Schrott: " + string.Format("{0:0.00}", resources.waste);
 
         // FUEL AND WASTE PROGRESS BARS
-        fuelProgress.value = (float) (resources.fuel / resources.max_fuel);
+        float fuelProgressValue = (float)(resources.fuel / resources.max_fuel); // for later use
+        fuelProgress.value = fuelProgressValue;
         wasteProgress.value = (float)(resources.waste / resources.max_waste);
+
+        // FUEL LOW ALARM WHEN UNDER 10%
+        if (fuelProgressValue < 0.10 && !alarmSound.isPlaying && gameManager.game_running)
+        {
+            addToLog("KRAFTSTOFF NIEDRIG");
+            alarmSound.Play();
+        } else if (!gameManager.game_running && alarmSound.isPlaying)
+        {
+            alarmSound.Stop();
+        }
 
         // RESOURCE STATS
         statsText = "";
@@ -134,6 +149,8 @@ public class UIManager : MonoBehaviour
         addStatText("Kraftstoffverbrauch " + string.Format("{0:00.00}", resources.consumption_general));
         addStatText("Schrottsammelrate " + string.Format("{0:00.00}", resources.waste_collection));
         consumptionStats.text = statsText;
+
+        
     }
 
     // refreshes the Button text on the UI
@@ -270,6 +287,13 @@ public class UIManager : MonoBehaviour
     public void goToMainMenu()
     {
         SceneManager.LoadScene(0);
+    }
+
+    // set time scale from UI slider
+    public void setTimeScale(float value)
+    {
+        timeManager.time_scale = value;
+        timeManager.refresh_rate = Mathf.Clamp((float) (value * 4.0), 4.0f, 10.0f);
     }
 
 }
