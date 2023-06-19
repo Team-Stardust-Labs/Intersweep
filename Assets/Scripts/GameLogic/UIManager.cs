@@ -13,6 +13,7 @@ using UnityEngine.UI;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using UnityEngine.Audio;
 
 public class UIManager : MonoBehaviour
 {
@@ -26,6 +27,13 @@ public class UIManager : MonoBehaviour
     public AudioSource winSound;
     public AudioSource loseSound;
     public GameObject pauseMenuUI;
+
+    // audio
+    public AudioMixer audioMixer;
+    public Slider masterVolumeSlider;
+    public Slider musicVolumeSlider;
+    public Slider sfxVolumeSlider;
+
 
     // stats
     public TextMeshProUGUI stats;
@@ -75,6 +83,8 @@ public class UIManager : MonoBehaviour
 
     // Audio
     public AudioSource alarmSound;
+
+
 
     // shows or hides the Win Screen
     public void setWinScreen(bool active)
@@ -296,4 +306,54 @@ public class UIManager : MonoBehaviour
         timeManager.refresh_rate = Mathf.Clamp((float) (value * 4.0), 4.0f, 10.0f);
     }
 
+
+    // audio mixer methods
+    public void setMasterVolume(float vol)
+    {
+        float targetVolume = Mathf.Log10(vol) * 30.0f;
+        targetVolume = Mathf.Clamp(targetVolume, -79.0f, 0.0f);
+        audioMixer.SetFloat("MasterVolume", targetVolume);
+    }
+
+    public void setSFXVolume(float vol)
+    {
+        float targetVolume = Mathf.Log10(vol) * 30.0f;
+        targetVolume = Mathf.Clamp(targetVolume, -79.0f, 0.0f);
+        audioMixer.SetFloat("SFXVolume", targetVolume);
+    }
+
+    public void setMusicVolume(float vol)
+    {
+        float targetVolume = Mathf.Log10(vol) * 30.0f;
+        targetVolume = Mathf.Clamp(targetVolume, -79.0f, 0.0f);
+        audioMixer.SetFloat("MusicVolume", targetVolume);
+    }
+
+    public void loadMixerVolumes()
+    {
+        // load the values and apply
+
+        float masterVolume = PlayerPrefs.GetFloat("MasterVolume", 1.0f) ;
+        float musicVolume = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
+        float sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 1.0f);
+        
+        setMasterVolume(masterVolume);
+        setMusicVolume(musicVolume);
+        setSFXVolume(sfxVolume);
+
+        // sliders
+        masterVolumeSlider.value = masterVolume;
+        musicVolumeSlider.value = musicVolume;
+        sfxVolumeSlider.value = sfxVolume;
+
+    }
+
+    public void saveMixerVolumes()
+    {
+        // save audio slider values to player prefs
+        PlayerPrefs.SetFloat("MasterVolume", masterVolumeSlider.value);
+        PlayerPrefs.SetFloat("MusicVolume", musicVolumeSlider.value);
+        PlayerPrefs.SetFloat("SFXVolume", sfxVolumeSlider.value);
+
+    }
 }

@@ -26,15 +26,27 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // graphics setup
         QualitySettings.vSyncCount = 2;                     // enable vsync to counter screen tearing
         Application.targetFrameRate = target_frame_rate;    // the game dosen't need to run at 5000 fps so cap it reasonably
         Screen.SetResolution(1920, 1080, true);             // the UI is not fully responsive so set it to a widely accepted standard resolution
-    
+
+
+        // UI setup
         UI.updateRecyclingUI();
         UI.setWinScreen(false);
         UI.setLoseScreen(false);
 
         UI.pauseMenuUI.SetActive(false);
+
+        // audio setup
+        UI.loadMixerVolumes();
+    }
+
+    private void OnDisable()
+    {
+        // audio
+        UI.saveMixerVolumes();
     }
 
     void Update()
