@@ -7,54 +7,160 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.SceneManagement;
+//using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using UnityEngine.Audio;
 
 public class UIManager : MonoBehaviour
 {
 
 
     // User Interface References
-    public string statsText = "";
     public TextMeshProUGUI statisticsText;
     public TextMeshProUGUI logText;
+    public GameObject winScreenUI;
+    public GameObject loseScreenUI;
+    public AudioSource winSound;
+    public AudioSource loseSound;
+    public GameObject pauseMenuUI;
+
+    // audio
+    public AudioMixer audioMixer;
+    public Slider masterVolumeSlider;
+    public Slider musicVolumeSlider;
+    public Slider sfxVolumeSlider;
+
+
+    // stats
+    public TextMeshProUGUI stats;
+
+    // fuel and waste bar
+    public Slider fuelProgress;
+    public Slider wasteProgress;
+    public TextMeshProUGUI fuelLabel;
+    public TextMeshProUGUI wasteLabel;
+
+    // resource UI
+    public Slider spaceStationProgress;
+    public TextMeshProUGUI resourceStats;
+
+
+    // energy UI
+    public Slider solarProgress;
+    public Slider solarCapacityProgress;
+    public TextMeshProUGUI solarCountLabel;
+    public TextMeshProUGUI solarCapacityLabel;
+
+
+    // ship UI
+    public Slider shipProgress;
+    public Slider shipCapacityProgress;
+    public TextMeshProUGUI shipCountLabel;
+    public TextMeshProUGUI shipCapacityLabel;
+
+    // recycling UI
     public Slider recyclingCopperSlider;
     public Slider recyclingIronSlider;
     public Slider recyclingMetalsSlider;
     public TextMeshProUGUI recyclingCopperLabel;
     public TextMeshProUGUI recyclingIronLabel;
     public TextMeshProUGUI recyclingMetalsLabel;
-    public GameObject winScreenUI;
-    public GameObject loseScreenUI;
-    public Slider shipProgress;
-    public Slider shipCapacityProgress;
-    public Slider solarProgress;
-    public Slider spaceStationProgress;
 
+    // consumption UI
+    public TextMeshProUGUI consumptionStats;
+
+    public string statsText = "";
     public bool print_debug_logs = false;
 
     // Manager References
     public TimeManager timeManager;
     public ResourceManager resources;
+    public GameManager gameManager;
+
+    // Audio
+    public AudioSource alarmSound;
+
+
 
     // shows or hides the Win Screen
     public void setWinScreen(bool active)
     {
         winScreenUI.SetActive(active);
+
+        if(active)
+        {
+            winSound.Play();
+        }
+        
     }
 
     // shows or hides the Lose Screen
     public void setLoseScreen(bool active)
     {
         loseScreenUI.SetActive(active);
+
+        if(active)
+        {
+            loseSound.Play();
+        }
     }
 
     // applies the statistics to the user interface
     public void applyToStatUI()
     {
-        statisticsText.text = statsText;
+        //statisticsText.text = statsText;   // long stat ui list is depcrecated
+
+
+        // DAY AND SECTOR STATS
+        stats.text =  "Tag\t" +    string.Format("{0:00}", timeManager.elapsed_hours / 24) + "\n"
+                    + "Stunde\t" + string.Format("{0:00}", timeManager.elapsed_hours % 24) + "\n"
+                    + "Sektor\t" + resources.sector.ToString() + "/" + resources.max_sector.ToString();
+
+        // FUEL AND WASTE LABELS
+        fuelLabel.text = "Kraftstoff: " + string.Format("{0:0.00}", resources.fuel);
+        wasteLabel.text = "Schrott: " + string.Format("{0:0.00}", resources.waste);
+
+        // FUEL AND WASTE PROGRESS BARS
+        float fuelProgressValue = (float)(resources.fuel / resources.max_fuel); // for later use
+        fuelProgress.value = fuelProgressValue;
+        wasteProgress.value = (float)(resources.waste / resources.max_waste);
+
+        // FUEL LOW ALARM WHEN UNDER 10%
+        if (fuelProgressValue < 0.10 && !alarmSound.isPlaying && gameManager.game_running)
+        {
+            addToLog("KRAFTSTOFF NIEDRIG");
+            alarmSound.Play();
+        } else if (!gameManager.game_running && alarmSound.isPlaying)
+        {
+            alarmSound.Stop();
+        }
+
+        // RESOURCE STATS
+        statsText = "";
+        addStatText("Kupfer\t" + string.Format("{0:000.0} [+{1:00.00}]", resources.copper, resources.income_copper));
+        addStatText("Eisen\t" + string.Format("{0:000.0} [+{1:00.00}]", resources.iron, resources.income_iron));
+        addStatText("Gold\t" + string.Format("{0:000.0} [+{1:00.00}]", resources.metals, resources.income_metals));
+        resourceStats.text = statsText;
+
+        // SOLAR COUNT AND CAPACITY
+        solarCountLabel.text = "Solarpanels " + resources.solar_count.ToString() + "/" + resources.max_solar_count.ToString();
+        solarCapacityLabel.text = "Solarkapazität " + string.Format("{0:0.0}", resources.solar_capacity);
+
+        // SHIP COUNT AND CAPACITY
+        shipCountLabel.text = "Schiffanzahl " + resources.ship_count.ToString();
+        shipCapacityLabel.text = "Sammelkapazität " + string.Format("{0:0.0}", resources.ship_capacity);
+
+        // CONSUMPTION STATS
+        statsText = "";
+        addStatText("Kraftstoffverbrauch " + string.Format("{0:00.00}", resources.consumption_general));
+        addStatText("Schrottsammelrate " + string.Format("{0:00.00}", resources.waste_collection));
+        consumptionStats.text = statsText;
+
+        
     }
 
     // refreshes the Button text on the UI
@@ -71,6 +177,10 @@ public class UIManager : MonoBehaviour
 
         // update upgrade solar panel progress
         spaceStationProgress.value = Mathf.Clamp((float)(resources.copper / (resources.space_station_base_cost + (resources.space_station_upgrade_cost * resources.space_station_level))), 0.0f, 1.0f);
+
+        // update solar panel capacity progress
+        solarCapacityProgress.value = Mathf.Clamp((float)(resources.metals / (resources.solar_capacity_base_cost + (resources.solar_capacity_upgrade_cost * resources.solar_capacity_level))), 0.0f, 1.0f);
+
     }
 
     // adds the string s to the statsText variable for debug UI
@@ -86,7 +196,8 @@ public class UIManager : MonoBehaviour
     {
         if ((debug == true && print_debug_logs == true) || (debug == false))
         {
-            logText.text = logText.text.Insert(0, ">> " + s + "\n");
+            //logText.text = logText.text.Insert(0, ">> " + s + "\n"); // this adds to the log
+            logText.text = ">> " + s; // this replaces the log text
         }
     }
 
@@ -95,7 +206,8 @@ public class UIManager : MonoBehaviour
     public void printStatistics()
     {
         statsText = "";
-
+        applyToStatUI();
+        /*
         // time info
         addStatText("----- GENERAL", true);
         addStatText("DAY: " + timeManager.elapsed_days);
@@ -125,8 +237,8 @@ public class UIManager : MonoBehaviour
         addStatText("----- SHIPS", true);
         addStatText("SCHIFFE: \t\t" + resources.ship_count);
         addStatText("KAPAZITÄT: \t" + resources.ship_capacity);
+        */
 
-        applyToStatUI();
     }
 
 
@@ -170,5 +282,78 @@ public class UIManager : MonoBehaviour
         updateRecyclingUI(2); // 2 is for metals
     }
 
+    public void toggleInGamePause()
+    {
+        if (pauseMenuUI.activeSelf)
+        {
+            pauseMenuUI.SetActive(false);
+        } 
+        else
+        {
+            pauseMenuUI.SetActive(true);
+        }
+    }
 
+    public void goToMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    // set time scale from UI slider
+    public void setTimeScale(float value)
+    {
+        timeManager.time_scale = value;
+        timeManager.refresh_rate = Mathf.Clamp((float) (value * 4.0), 4.0f, 10.0f);
+    }
+
+
+    // audio mixer methods
+    public void setMasterVolume(float vol)
+    {
+        float targetVolume = Mathf.Log10(vol) * 30.0f;
+        targetVolume = Mathf.Clamp(targetVolume, -79.0f, 0.0f);
+        audioMixer.SetFloat("MasterVolume", targetVolume);
+    }
+
+    public void setSFXVolume(float vol)
+    {
+        float targetVolume = Mathf.Log10(vol) * 30.0f;
+        targetVolume = Mathf.Clamp(targetVolume, -79.0f, 0.0f);
+        audioMixer.SetFloat("SFXVolume", targetVolume);
+    }
+
+    public void setMusicVolume(float vol)
+    {
+        float targetVolume = Mathf.Log10(vol) * 30.0f;
+        targetVolume = Mathf.Clamp(targetVolume, -79.0f, 0.0f);
+        audioMixer.SetFloat("MusicVolume", targetVolume);
+    }
+
+    public void loadMixerVolumes()
+    {
+        // load the values and apply
+
+        float masterVolume = PlayerPrefs.GetFloat("MasterVolume", 1.0f) ;
+        float musicVolume = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
+        float sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 1.0f);
+        
+        setMasterVolume(masterVolume);
+        setMusicVolume(musicVolume);
+        setSFXVolume(sfxVolume);
+
+        // sliders
+        masterVolumeSlider.value = masterVolume;
+        musicVolumeSlider.value = musicVolume;
+        sfxVolumeSlider.value = sfxVolume;
+
+    }
+
+    public void saveMixerVolumes()
+    {
+        // save audio slider values to player prefs
+        PlayerPrefs.SetFloat("MasterVolume", masterVolumeSlider.value);
+        PlayerPrefs.SetFloat("MusicVolume", musicVolumeSlider.value);
+        PlayerPrefs.SetFloat("SFXVolume", sfxVolumeSlider.value);
+
+    }
 }
